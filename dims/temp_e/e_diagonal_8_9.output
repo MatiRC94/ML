@@ -1,0 +1,32 @@
+
+Naive Bayes con distribuciones normales:
+Cantidad de entradas:8
+Cantidad de clases:2
+Archivo de patrones: temp_e/e_diagonal_8_9
+Cantidad total de patrones: 200
+Cantidad de patrones de entrenamiento: 200
+Cantidad de patrones de validacion: 0
+Cantidad de patrones de test: 10000
+Semilla para la funcion rand(): 1624551689
+Clase 0: 200 patrones , en 0 : mu: -0.484446 , sigma: 4.783830, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 1 : mu: -0.923445 , sigma: 4.660801, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 2 : mu: -0.909272 , sigma: 5.878893, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 3 : mu: -0.610066 , sigma: 4.143441, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 4 : mu: -0.944412 , sigma: 5.819938, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 5 : mu: -0.960325 , sigma: 4.378758, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 6 : mu: -1.035540 , sigma: 5.041893, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 0: 200 patrones , en 7 : mu: -1.123221 , sigma: 4.839283, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 0 : mu: 0.813746 , sigma: 4.463227, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 1 : mu: 1.352799 , sigma: 5.087117, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 2 : mu: 1.039010 , sigma: 5.130877, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 3 : mu: 1.007663 , sigma: 5.382796, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 4 : mu: 0.776855 , sigma: 4.663886, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 5 : mu: 0.918483 , sigma: 3.572418, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 6 : mu: 0.884627 , sigma: 4.695812, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Clase 1: 200 patrones , en 7 : mu: 0.689467 , sigma: 4.462374, cantidad total elementos: 100, probabilidad de la clase: 0.500000 
+Fin del entrenamiento.
+
+Errores:
+Entrenamiento:13.500000%
+Validacion:13.500000%
+Test:10.080000%

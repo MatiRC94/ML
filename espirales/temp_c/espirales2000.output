@@ -1,0 +1,20 @@
+
+Naive Bayes con distribuciones normales:
+Cantidad de entradas:2
+Cantidad de clases:2
+Archivo de patrones: temp_c/espirales2000
+Cantidad total de patrones: 2000
+Cantidad de patrones de entrenamiento: 2000
+Cantidad de patrones de validacion: 0
+Cantidad de patrones de test: 2000
+Semilla para la funcion rand(): -1940618313
+Clase 0: 2000 patrones , en 0 : mu: -0.088076 , sigma: 0.233319, cantidad total elementos: 1000, probabilidad de la clase: 0.500000 
+Clase 0: 2000 patrones , en 1 : mu: -0.017503 , sigma: 0.261458, cantidad total elementos: 1000, probabilidad de la clase: 0.500000 
+Clase 1: 2000 patrones , en 0 : mu: 0.108062 , sigma: 0.249611, cantidad total elementos: 1000, probabilidad de la clase: 0.500000 
+Clase 1: 2000 patrones , en 1 : mu: 0.020549 , sigma: 0.240654, cantidad total elementos: 1000, probabilidad de la clase: 0.500000 
+Fin del entrenamiento.
+
+Errores:
+Entrenamiento:43.600000%
+Validacion:43.600000%
+Test:45.550000%
