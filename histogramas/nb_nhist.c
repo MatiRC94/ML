@@ -47,7 +47,7 @@ double **min_val;              /* valores minimos para limitar bins */
 int *seq;      	       		  /* sequencia de presentacion de los patrones*/
 
 double *prob_d;
-
+int* temp_cant_clases;     /* arreglo de clases, cada indice representa una clase y el int que contiene la cantidad de elementos que pertenecen a esa clase */
 /*variables globales auxiliares*/
 char filepat[100];
 /*bandera de error*/
@@ -65,6 +65,7 @@ int define_matrix(){
   else max=PTEST;
 
   seq =(int *)calloc(max,sizeof(int));
+  temp_cant_clases = calloc(N_Class,sizeof(int));
   pred=(int *)calloc(max,sizeof(int));
   if(seq==NULL||pred==NULL) return 1;
   
@@ -95,14 +96,19 @@ int define_matrix(){
   }
 
 /*ALLOCAR ESPACIO PARA LAS MATRICES DEL ALGORITMO*/
-  histograma=(double ***)calloc(N_Class,sizeof(double **));
+  histograma=(double ***)malloc(N_Class*sizeof(double **));
+  if (histograma == NULL) {
+        return 1;
+  }
   for (i=0; i<N_IN ; i++){
-    histograma[i]=(double **)calloc(N_IN,sizeof(double *));
-    /*for (j=0; j<N_BINS; j++){
-      histograma[i][j]=(double)calloc(N_BINS,sizeof(double));
-    }*/
+    histograma[i]=(double **)malloc(N_IN*sizeof(double *));
+    if (histograma[i] == NULL) {
+      return 1;
+    }
+    for (j=0; j<N_BINS; j++){
+      histograma[i][j]=(double*)calloc(N_BINS,sizeof(double));
+    }
   }  
-  
 
   return 0;
 }
@@ -298,9 +304,24 @@ void shuffle(int hasta){
 /* ------------------------------------------------------------------- */
 double prob(double x,int feature,int clase)  {
 
-  /*IMPLEMENTAR*/
+int hvalue;
+double maxval = max_val[clase][feature]; //maximo y minimo valor por cada feature y clase
+double minval = min_val[clase][feature];
+        // CUIDADO QUE SI EL MAX Y EL MIN SON IGUALES HAY SEGFAULT
+double anchoh = (maxval-minval)/(N_BINS);  //ancho de cada columna
+    if (x < min_val[clase][feature]) {
+      hvalue = 0;
+    } else {
+        if ( x > max_val[clase][feature]){
+          hvalue = N_BINS-1;
+        } else {
+          hvalue = (int)floor((x - minval)/anchoh) ; //columna perteneciente
+        }
 
-  return 1;  
+    }
+    
+  return (histograma[clase][feature][hvalue] + 1.0) / (double) (temp_cant_clases[clase] + N_BINS);
+
 }
 /* ------------------------------------------------------------------------------ */
 /*output: calcula la probabilidad de cada clase dado un vector de entrada *input
@@ -321,7 +342,7 @@ int output(double *input){
 
     /*agrega la probabilidad a priori de la clase*/
     /*COMPLETAR*/
-    //prob_de_clase += log(...);
+    prob_de_clase += log(prob_d[k]);
 
     /*guarda la clase con prob maxima*/
     if (prob_de_clase>=max_prob){
@@ -376,7 +397,7 @@ int train(char *filename){
   int i,j,k,feature,clase;
   double sigma,me;
   double train_error,valid_error,test_error;
-  int* temp_cant_clases;     /* arreglo de clases, cada indice representa una clase y el int que contiene la cantidad de elementos que pertenecen a esa clase */
+
   FILE *salida,*fpredic;
 
   /*Asigno todos los patrones del .data como entrenamiento porque este metodo no requiere validacion*/
@@ -390,27 +411,59 @@ int train(char *filename){
     shuffle(PTOT);
   }
 
-  temp_cant_clases = calloc(N_Class,sizeof(int));
+
 
   /*Calcular probabilidad intrinseca de cada clase*/
   
-    int c;
+    int c,hvalue,temp;
+    temp=0;
+    double maxval,minval,anchoh,dato;
+  
   for(i=0 ; i<N_TOTAL ; i++){
       c = (int)data[i][N_IN]; //CLASE
       temp_cant_clases[c]++;  // en el lugar del arreglo correspondiente(es decir la clase) agrego 1 al contador
+      for (j=0; j<N_IN ; j++){  //Cada Feature
+        dato = data[i][j];
+        maxval = max_val[c][j]; //maximo y minimo valor por cada feature y clase
+        minval = min_val[c][j];
+        // CUIDADO QUE SI EL MAX Y EL MIN SON IGUALES HAY SEGFAULT
+        anchoh = (maxval-minval)/(N_BINS);  //ancho de cada columna
+        hvalue = (int)floor((dato - minval)/anchoh) ; //columna perteneciente
+/*        printf("\nClase %d:", c);*/
+/*        printf("Feature %d:\n", j);*/
+/*        printf("Min: %f\n", minval);*/
+/*        printf("Max: %f\n", maxval);*/
+/*        printf("Bin size: %f\n", anchoh);*/
+/*        printf("Hvalue %d:\n", hvalue);*/
+/*        printf("dato %f:\n", dato);*/
+        printf("ntotal %d:\n", N_TOTAL);
+          /* Lleno el histograma por frecuencia */
+        histograma[c][j][hvalue]++;
+        printf("histograma %d %d %d %d:\n",c,j,hvalue,(int) histograma[c][j][hvalue]);
+        temp++;
+      }
   }
+          printf("total bucles %d:\n", temp);
   for(i=0 ; i< N_Class; i++){
     prob_d[i] = temp_cant_clases[i]/(double)N_TOTAL;
     printf("\nProb clase: %d es : %f",i,prob_d[i]);
+    printf("\n clase %d cant:%d",i,temp_cant_clases[i]);
   }
 
+  /* DEBUG HISTOGRAMA */
 
-
-
-  /*Calcular media y desv.est. por clase y cada atributo*/
-
-
-
+    printf("\n*********************************");
+    printf("\nHISTOGRAMA***********************");
+    printf("\n*********************************");
+    printf("\n\n\n");
+    printf("histograma CLASE FEAT BIN CANT\n");
+    for (i = 0; i < N_Class; i++) {
+        for (j = 0; j < N_IN; j++) {
+            for (k = 0; k < N_BINS; k++) {
+                printf("histograma[%d][%d][%d]\t%d\n", i, j, k,(int) histograma[i][j][k]);
+            }
+        }
+    }
 
 
 
@@ -423,6 +476,9 @@ int train(char *filename){
   /*calcular error de test (si hay)*/
   if (PTEST>0) test_error =propagar(test,0,PTEST,0);
   else         test_error =0.;
+
+ 
+  
   /*mostrar errores*/
   printf("\nFin del entrenamiento.\n\n");
   printf("Errores:\nEntrenamiento:%f%%\n",train_error*100.);
